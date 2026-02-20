@@ -2,6 +2,9 @@ from app.repositories.pricing_repository import PricingRepository
 from app.models.pricing_model import Pricing
 from app.schemas.pricing_schema import PricingCreateSchema
 from pydantic import ValidationError
+import logging
+
+logger = logging.getLogger(__name__)
 
 class PricingService:
     def __init__(self, repository: PricingRepository):
@@ -11,6 +14,7 @@ class PricingService:
         pricing = self.repository.get_by_product_id(product_id)
 
         if not pricing:
+            logger.warning(f"Product with ID {product_id} not found.")
             return {"error": "Product not found"}
 
         return {
@@ -33,5 +37,5 @@ class PricingService:
         )
 
         self.repository.save(pricing)
-
+        logger.info(f"Saving pricing for product {validated.product_id}")
         return {"message": "Pricing saved successfully"}
