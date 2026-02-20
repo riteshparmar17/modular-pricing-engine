@@ -1,6 +1,7 @@
 from flask import Flask
 from app.config import Config
 from app.routes.health import health_bp
+from app.api.pricing_routes import pricing_bp
 
 def create_app(config_class=Config):
     """
@@ -13,5 +14,6 @@ def create_app(config_class=Config):
     
     # Register blueprints
     app.register_blueprint(health_bp)
+    app.register_blueprint(pricing_bp)
 
     return app
