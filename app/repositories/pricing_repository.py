@@ -1,11 +1,12 @@
 from pymongo.collection import Collection
 from app.models.pricing_model import Pricing
+from typing import Optional
 
 class PricingRepository:
     def __init__(self, collection: Collection):
         self.collection = collection
 
-    def get_by_product_id(self, product_id: str) -> Pricing | None:
+    def get_by_product_id(self, product_id: str) -> Optional[Pricing]:
         data = self.collection.find_one({"product_id": product_id})
 
         if not data:
