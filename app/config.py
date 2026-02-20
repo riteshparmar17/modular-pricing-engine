@@ -1,13 +1,24 @@
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 class Config:
+
+    """
+    Base configuration.
+    Reads values from environment variables.
+    """
+
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    #Future DB/Redis configurations can be added here
+    MONGO_URI = os.getenv('MONGO_URI')
+    REDIS_URL = os.getenv('REDIS_URL')
+    PORT = int(os.getenv('PORT', 5000))
+
     DEBUG = False
     TESTING = False
-    SECRET_KEY = os.getenv('SECRET_KEY', 'dev_secret_key')
-
-    #Future DB/Redis configurations can be added here
-    MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/pricing_db')
-    REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
 
 class DevelopmentConfig(Config):
     DEBUG = True
