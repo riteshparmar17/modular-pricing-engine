@@ -1,5 +1,7 @@
 from app.repositories.pricing_repository import PricingRepository
 from app.models.pricing_model import Pricing
+from app.schemas.pricing_schema import PricingCreateSchema
+from pydantic import ValidationError
 
 class PricingService:
     def __init__(self, repository: PricingRepository):
@@ -19,10 +21,15 @@ class PricingService:
         }
     
     def create_or_update_price(self, data: dict) -> dict:
+        try:
+            validated = PricingCreateSchema(**data)
+        except ValidationError as e:
+            return {"error": e.errors()}
+
         pricing = Pricing(
-            product_id=data["product_id"],
-            base_price=float(data["base_price"]),
-            discount=float(data.get("discount", 0.0))
+            product_id=validated.product_id,
+            base_price=validated.base_price,
+            discount=validated.discount
         )
 
         self.repository.save(pricing)
