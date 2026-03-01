@@ -2,9 +2,9 @@ import os
 from app import create_app
 from app.config import DevelopmentConfig, ProductionConfig
 
-env = os.getenv('FLASK_ENV', 'development')
+config_name = os.getenv("APP_CONFIG", "development")
 
-if env == 'production':
+if config_name == "production":
     app = create_app(ProductionConfig)
 else:
     app = create_app(DevelopmentConfig)
