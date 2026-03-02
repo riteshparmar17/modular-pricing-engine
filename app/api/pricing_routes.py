@@ -1,11 +1,11 @@
 from flask import Blueprint, jsonify, request
-from flask_pymongo import PyMongo
+from app.extensions import mongo
 from app.repositories.pricing_repository import PricingRepository
 from app.services.pricing_service import PricingService
+from flask_jwt_extended import jwt_required
 
 pricing_bp = Blueprint("pricing", __name__)
 
-mongo = PyMongo()
 
 @pricing_bp.record_once
 def on_load(state):
@@ -23,6 +23,7 @@ def get_price(product_id):
     return jsonify(result)
 
 @pricing_bp.route("/price", methods=["POST"])
+@jwt_required()
 def create_price():
     """
     Create pricing entry
